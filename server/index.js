@@ -26,10 +26,10 @@ app.use("/auth", authRoute);
 app.use("/users", userRoute);
 app.use("/costs", costRoute);
 
-app.use(express.static(path.resolve(__dirname, './build2')));
+app.use(express.static(path.resolve(__dirname, './build')));
 
 app.get('*', function (req, res) {
-  const index = path.join(__dirname,'build2', 'index.html');
+  const index = path.join(__dirname,'build', 'index.html');
   res.sendFile(index);
 });
 
