@@ -1,9 +1,13 @@
+// importing to user and cost schemes
 const router = require("express").Router();
 const User = require("../models/User");
 const Cost = require("../models/Cost");
+
+// importing password encryption module
 const bcrypt = require("bcryptjs");
 
-//UPDATE
+// UPDATE, HTTP method: put
+// updating user details
 router.put("/:id", async (req, res) => {
   if (req.body.userId === req.params.id) {
     if (req.body.password) {
@@ -27,13 +31,17 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-//DELETE
+// DELETE, HTTP method: delete
+// removing user from the system
 router.delete("/:id", async (req, res) => {
   if (req.body.userId === req.params.id) {
     try {
+      // finding the user in the DB by users id
       const user = await User.findById(req.params.id);
       try {
+        // deleting all costs related to user
         await Cost.deleteMany({ username: user.username });
+        // finding and deleting the user
         await User.findByIdAndDelete(req.params.id);
         res.status(200).json("User has been deleted...");
       } catch (err) {
@@ -47,9 +55,11 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-//GET USER
+// GET USER, HTTP method: get
+// getting user profile
 router.get("/:id", async (req, res) => {
   try {
+    // finding the user by id
     const user = await User.findById(req.params.id);
     const { password, ...others } = user._doc;
     res.status(200).json(others);
@@ -58,4 +68,5 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// exporting to allow importing in another place
 module.exports = router;
